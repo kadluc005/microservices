@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../backend"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../service2"
+		}
+	],
+	"settings": {}
+}
