@@ -11,7 +11,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         transport: Transport.TCP, 
         options: { 
           port: 3001,
-          host: 'communication-service',
+          host: 'localhost',
          }
       },
       {
@@ -19,7 +19,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         transport: Transport.TCP,
         options: { 
           port: 3002,
-          host: 'analytic-service',
+          host: 'localhost',
         },
       },
     ])

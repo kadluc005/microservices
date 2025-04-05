@@ -1,20 +1,34 @@
-# Dockerfile
-FROM node:22
+# Étape de construction
+FROM node:18-alpine AS builder
 
-# Crée le répertoire de l'app
 WORKDIR /app
 
-# Copie les fichiers de dépendances
+# Copiez les fichiers de configuration des dépendances
 COPY package*.json ./
+COPY tsconfig*.json ./
 
-# Installe les dépendances
-RUN npm install
+# Installez toutes les dépendances (y compris devDependencies)
+#RUN npm install -g @nestjs/cli
+#RUN npm install --include=dev
 
-# Copie le reste du code
+# Copiez le reste des fichiers
 COPY . .
 
-# Expose le port (remplace par le bon pour chaque service)
-EXPOSE 3000
+# Construisez l'application
+RUN npm run build
 
-# Commande de démarrage
-CMD ["npm", "run", "start"]
+# Étape d'exécution
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY package*.json ./
+
+# Installez uniquement les dépendances de production pour la phase d'exécution
+RUN npm install --omit=dev
+
+EXPOSE 3000 3001 3002 3003
+
+CMD ["node", "dist/main"]

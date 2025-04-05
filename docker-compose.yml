@@ -1,19 +1,37 @@
 version: '3.8'
 
 services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - service1
+      - service2
+    environment:
+      - NODE_ENV=production
+    networks:
+      - nest-network
+
   service1:
     build: ./service1
     ports:
       - "3001:3001"
+    environment:
+      - NODE_ENV=production
     networks:
-      - ms-net
+      - nest-network
 
   service2:
     build: ./service2
     ports:
       - "3002:3002"
+      - "3003:3003" # Port HTTP pour service2
+    environment:
+      - NODE_ENV=production
     networks:
-      - ms-net
+      - nest-network
 
 networks:
-  ms-net:
+  nest-network:
+    driver: bridge
